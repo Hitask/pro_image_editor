@@ -8,7 +8,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter/services.dart';
-
 // Project imports:
 import 'package:pro_image_editor/mixins/converted_callbacks.dart';
 import 'package:pro_image_editor/models/crop_rotate_editor/transform_factors.dart';
@@ -21,6 +20,7 @@ import 'package:pro_image_editor/widgets/extended/extended_transform_scale.dart'
 import 'package:pro_image_editor/widgets/outside_gestures/crop_rotate_gesture_detector.dart';
 import 'package:pro_image_editor/widgets/outside_gestures/outside_gesture_listener.dart';
 import 'package:pro_image_editor/widgets/screen_resize_detector.dart';
+
 import '../../mixins/converted_configs.dart';
 import '../../mixins/extended_loop.dart';
 import '../../mixins/standalone_editor.dart';
@@ -161,6 +161,7 @@ class CropRotateEditor extends StatefulWidget
           'must be provided.');
     }
   }
+
   @override
   final CropRotateEditorInitConfigs initConfigs;
   @override
@@ -719,6 +720,10 @@ class CropRotateEditorState extends State<CropRotateEditor>
       if (imageInfos == null) {
         await setImageInfos(activeHistory: activeHistory);
       }
+
+      // Additionally pass the image crop information
+      await initConfigs.onDone
+          ?.call(transformC, _transformHelperScale, imageInfos);
 
       if (!mounted) {
         LoadingDialog.instance.hide();
